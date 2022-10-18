@@ -14,6 +14,30 @@ struct SecondDesignView: View {
     @State private var countries = ["Esronia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
     @State private var correctAnswer = Int.random(in: 0...2)
     
+    struct FlagImage: View {
+        var flag: String
+        var body: some View {
+            Image(flag)
+                .renderingMode(.original)
+                .clipShape(Capsule())
+                .shadow(radius: 5)
+        }
+    }
+    
+    struct Titles: ViewModifier {
+        func body(content: Content) -> some View {
+            content
+                .font(.largeTitle.bold())
+                .foregroundColor(.white)
+        }
+    }
+// Not sure why it doesn't work?!
+//    extension View {
+//        func titleStyle() -> some View {
+//            modifier(Title())
+//        }
+//    }
+    
     var body: some View {
         ZStack{
             RadialGradient(stops: [.init(color: Color(red: 0.1, green: 0.2, blue: 0.45), location: 0.3), .init(color: Color(red: 0.76, green: 0.15, blue: 0.26), location: 0.3)], center: .top, startRadius: 200, endRadius: 700)
@@ -22,8 +46,7 @@ struct SecondDesignView: View {
             VStack {
                 Spacer()
                 Text("Guess the Flag")
-                    .font(.largeTitle.bold())
-                    .foregroundColor(.white)
+                    .modifier(Titles())
                 VStack(spacing: 15) {
                     VStack{
                         Text("Tap the flag of")
@@ -37,10 +60,8 @@ struct SecondDesignView: View {
                         Button {
                             flaggedTapped(number)
                         } label: {
-                            Image(countries[number])
-                                .renderingMode(.original)
-                                .clipShape(Capsule())
-                                .shadow(radius: 5)
+                            FlagImage(flag: countries[number])
+                                
                         }
                     }
                 }
